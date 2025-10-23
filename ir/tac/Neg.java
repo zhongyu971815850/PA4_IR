@@ -1,14 +1,14 @@
 package ir.tac;
 
-public class Add extends Assign {
+public class Neg extends Assign {
 
-    public Add(int id, Variable dest, Value left, Value right) {
-        super(id, dest, left, right);
+    public Neg(int id, Variable dest, Value operand) {
+        super(id, dest, operand, null);
     }
 
     @Override
     protected String opcode() {
-        return "add";
+        return "neg";
     }
 
     @Override

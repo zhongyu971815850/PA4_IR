@@ -1,14 +1,14 @@
 package ir.tac;
 
-public class Add extends Assign {
+public class Pow extends Assign {
 
-    public Add(int id, Variable dest, Value left, Value right) {
+    public Pow(int id, Variable dest, Value left, Value right) {
         super(id, dest, left, right);
     }
 
     @Override
     protected String opcode() {
-        return "add";
+        return "pow";
     }
 
     @Override

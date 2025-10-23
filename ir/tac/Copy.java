@@ -1,14 +1,14 @@
 package ir.tac;
 
-public class Add extends Assign {
+public class Copy extends Assign {
 
-    public Add(int id, Variable dest, Value left, Value right) {
-        super(id, dest, left, right);
+    public Copy(int id, Variable dest, Value source) {
+        super(id, dest, source, null);
     }
 
     @Override
     protected String opcode() {
-        return "add";
+        return "assign";
     }
 
     @Override
