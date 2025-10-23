@@ -1,25 +1,40 @@
 package ir.tac;
 
-public class Literal implements Value{
+import java.util.Objects;
 
-    private Expression val;
+import ast.BoolLiteral;
+import ast.Expression;
+import ast.FloatLiteral;
+import ast.IntegerLiteral;
+
+public class Literal implements Value {
+
+    private final Expression value;
+
+    public Literal(Expression value) {
+        this.value = Objects.requireNonNull(value, "Literal expression cannot be null");
+    }
+
+    public Expression value() {
+        return value;
+    }
 
     @Override
     public void accept(TACVisitor visitor) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'accept'");
+        visitor.visit(this);
     }
-    
+
     @Override
-    public String toString () {
-        if (val instanceof ast.BoolLiteral) {
-            return ((ast.BoolLiteral) val).value().toString();
+    public String toString() {
+        if (value instanceof BoolLiteral) {
+            return String.valueOf(((BoolLiteral) value).value());
         }
-        else if (val instanceof ast.IntegerLiteral) {
-            return ((ast.IntegerLiteral) val).value().toString();
+        if (value instanceof IntegerLiteral) {
+            return String.valueOf(((IntegerLiteral) value).value());
         }
-        else if (val instanceof ast.FloatLiteral) {
-            return ((ast.FloatLiteral) val).value().toString();
+        if (value instanceof FloatLiteral) {
+            return String.valueOf(((FloatLiteral) value).value());
         }
-        return "LiteralValueError";
+        return value.toString();
+    }
 }

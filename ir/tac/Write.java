@@ -1,12 +1,14 @@
 package ir.tac;
 
-public class Return extends TAC {
+import java.util.Objects;
+
+public class Write extends TAC {
 
     private final Value value;
 
-    public Return(int id, Value value) {
+    public Write(int id, Value value) {
         super(id);
-        this.value = value;
+        this.value = Objects.requireNonNull(value, "Write value cannot be null");
     }
 
     public Value value() {
@@ -16,16 +18,11 @@ public class Return extends TAC {
     @Override
     public void accept(TACVisitor visitor) {
         visitor.visit(this);
-        if (value != null) {
-            value.accept(visitor);
-        }
+        value.accept(visitor);
     }
 
     @Override
     public String toString() {
-        if (value == null) {
-            return "return";
-        }
-        return "return " + value;
+        return "write " + value;
     }
 }
