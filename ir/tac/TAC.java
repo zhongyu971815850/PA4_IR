@@ -1,37 +1,53 @@
 package ir.tac;
 
-/**
- * Base class for three-address-code (TAC) instructions used by the SSA IR.
- * Each instruction has a unique identifier which is preserved for debugging
- * and for mapping back to source locations. Instructions can be marked as
- * eliminated by optimizations without being removed from their block so that
- * subsequent passes can still reason about the original control-flow shape.
- */
 public abstract class TAC implements Visitable {
 
     private final int id; // instruction id
-
-    private boolean eliminated; // if this instruction is not needed by any optimization
+    /**
+     * Whether this instruction should be emitted when generating DLX.
+     * Optimizations mark instructions as non-emitting instead of removing them
+     * so that later passes can still reason about CFG shape.
+     */
+    private boolean emit;
 
     protected TAC(int id) {
         this.id = id;
-        this.eliminated = false;
+        this.emit = true;
     }
 
     public int id() {
         return id;
     }
 
+    /**
+     * Legacy helper kept for compatibility with earlier passes.
+     * Returns true when the instruction has been disabled.
+     */
     public boolean isEliminated() {
-        return eliminated;
+        return !emit;
     }
 
+    public boolean shouldEmit() {
+        return emit;
+    }
+
+    public void disableEmit() {
+        emit = false;
+    }
+
+    public void enableEmit() {
+        emit = true;
+    }
+
+    /**
+     * Backwards compatibility shims for older optimization code.
+     */
     public void markEliminated() {
-        eliminated = true;
+        disableEmit();
     }
 
     public void clearEliminated() {
-        eliminated = false;
+        enableEmit();
     }
 
     @Override

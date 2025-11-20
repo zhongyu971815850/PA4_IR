@@ -9,8 +9,12 @@ public class CFGPrinter implements CFGVisitor {
     private final StringBuilder builder = new StringBuilder();
 
     public String print(ControlFlowGraph graph) {
+        return print(graph, "CFG");
+    }
+
+    public String print(ControlFlowGraph graph, String graphName) {
         builder.setLength(0);
-        builder.append("digraph CFG {\n");
+        builder.append("digraph ").append(graphName).append(" {\n");
         builder.append("  node [shape=record];\n");
         graph.accept(this);
         builder.append("}\n");
@@ -23,7 +27,13 @@ public class CFGPrinter implements CFGVisitor {
             block.accept(this);
         }
         for (BasicBlock block : graph.getBlocks()) {
+            if (block.isUnreachable()) {
+                continue;
+            }
             for (BasicBlock successor : block.getSuccessors()) {
+                if (successor.isUnreachable()) {
+                    continue;
+                }
                 builder.append("  ")
                         .append(block.getLabel())
                         .append(" -> ")
@@ -43,6 +53,9 @@ public class CFGPrinter implements CFGVisitor {
 
     @Override
     public void visit(BasicBlock block) {
+        if (block.isUnreachable()) {
+            return;
+        }
         builder.append("  ")
                 .append(block.getLabel())
                 .append(" [label=\"")
@@ -51,7 +64,7 @@ public class CFGPrinter implements CFGVisitor {
         Iterator<TAC> iterator = block.iterator();
         while (iterator.hasNext()) {
             TAC tac = iterator.next();
-            if (tac.isEliminated()) {
+            if (!tac.shouldEmit()) {
                 continue;
             }
             builder.append(escape(tac.toString())).append("\\l");
@@ -72,6 +85,9 @@ public class CFGPrinter implements CFGVisitor {
     }
 
     private String escape(String text) {
-        return text.replace("\\", "\\\\").replace("\"", "\\\"");
+        return text.replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("<", "\\<")
+                .replace(">", "\\>");
     }
 }

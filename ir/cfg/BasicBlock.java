@@ -18,6 +18,7 @@ public class BasicBlock extends Block implements Iterable<TAC> {
     private final List<BasicBlock> successors;
     private final Set<BasicBlock> dominators;
     private BasicBlock immediateDominator;
+    private boolean unreachable;
 
     public BasicBlock(int num) {
         this.num = num;
@@ -25,6 +26,7 @@ public class BasicBlock extends Block implements Iterable<TAC> {
         this.predecessors = new ArrayList<>();
         this.successors = new ArrayList<>();
         this.dominators = new LinkedHashSet<>();
+        this.unreachable = false;
     }
 
     public int getNumber() {
@@ -43,12 +45,39 @@ public class BasicBlock extends Block implements Iterable<TAC> {
         return Collections.unmodifiableList(instructions);
     }
 
+    /**
+     * Internal mutable view of the instruction list for optimization passes.
+     */
+    public List<TAC> mutableInstructions() {
+        return instructions;
+    }
+
+    public void replaceInstruction(int index, TAC tac) {
+        instructions.set(index, Objects.requireNonNull(tac, "Instruction cannot be null"));
+    }
+
     public void addSuccessor(BasicBlock successor) {
         if (successor == null || successors.contains(successor)) {
             return;
         }
         successors.add(successor);
         successor.addPredecessor(this);
+    }
+
+    public void clearSuccessors() {
+        for (BasicBlock succ : new ArrayList<>(successors)) {
+            succ.removePredecessor(this);
+        }
+        successors.clear();
+    }
+
+    public void setSuccessors(List<BasicBlock> newSucc) {
+        clearSuccessors();
+        if (newSucc != null) {
+            for (BasicBlock succ : newSucc) {
+                addSuccessor(succ);
+            }
+        }
     }
 
     private void addPredecessor(BasicBlock predecessor) {
@@ -58,12 +87,20 @@ public class BasicBlock extends Block implements Iterable<TAC> {
         predecessors.add(predecessor);
     }
 
+    public void removePredecessor(BasicBlock predecessor) {
+        predecessors.remove(predecessor);
+    }
+
     public List<BasicBlock> getPredecessors() {
         return Collections.unmodifiableList(predecessors);
     }
 
     public List<BasicBlock> getSuccessors() {
         return Collections.unmodifiableList(successors);
+    }
+
+    public void removeSuccessor(BasicBlock succ) {
+        successors.remove(succ);
     }
 
     public void setImmediateDominator(BasicBlock immediateDominator) {
@@ -89,6 +126,14 @@ public class BasicBlock extends Block implements Iterable<TAC> {
 
     public Set<BasicBlock> getDominators() {
         return Collections.unmodifiableSet(dominators);
+    }
+
+    public boolean isUnreachable() {
+        return unreachable;
+    }
+
+    public void setUnreachable(boolean unreachable) {
+        this.unreachable = unreachable;
     }
 
     @Override

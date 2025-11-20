@@ -1,0 +1,26 @@
+digraph main {
+  node [shape=record];
+  BB0 [label="BB0:\lcall foo()\l"];
+  BB1 [label="BB1:\lreturn\l"];
+  BB0 -> BB1;
+}
+
+digraph foo {
+  node [shape=record];
+  BB0 [label="BB0:\lcall printInt(57)\lcall printInt(82)\l"];
+  BB1 [label="BB1:\lreturn\l"];
+  BB0 -> BB1;
+}
+
+digraph bar {
+  node [shape=record];
+  BB0 [label="BB0:\lt34 = add x, y\lt37 = add x, 2\lb = assign t37\lbg x, y -\> BB2 else BB3\l"];
+  BB1 [label="BB1:\lreturn\l"];
+  BB2 [label="BB2:\lt49 = add x, y\ld = assign t49\lt52 = add x, 2\lt54 = sub 0, t52\lb = assign t54\lt57 = add x, 1\l"];
+  BB3 [label="BB3:\lt60 = add x, 2\ld = assign t60\l"];
+  BB0 -> BB2;
+  BB0 -> BB3;
+  BB2 -> BB1;
+  BB3 -> BB1;
+}
+

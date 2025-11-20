@@ -49,7 +49,50 @@ public class ControlFlowGraph implements Visitable {
         }
     }
 
+    /**
+     * Remove blocks marked as unreachable from the CFG.
+     */
+    public void pruneUnreachable() {
+        List<BasicBlock> toRemove = new ArrayList<>();
+        for (BasicBlock b : blocks) {
+            if (b.isUnreachable() && b != entry) {
+                toRemove.add(b);
+            }
+        }
+        if (toRemove.isEmpty()) return;
+        blocks.removeAll(toRemove);
+        // drop edges pointing to removed blocks
+        for (BasicBlock b : blocks) {
+            List<BasicBlock> succCopy = new ArrayList<>(b.getSuccessors());
+            for (BasicBlock s : succCopy) {
+                if (s.isUnreachable()) {
+                    b.removeSuccessor(s);
+                }
+            }
+            List<BasicBlock> predCopy = new ArrayList<>(b.getPredecessors());
+            for (BasicBlock p : predCopy) {
+                if (p.isUnreachable()) {
+                    b.removePredecessor(p);
+                }
+            }
+            // prune branch instructions to unreachable targets
+            List<ir.tac.TAC> instrs = b.mutableInstructions();
+            for (ir.tac.TAC tac : instrs) {
+                if (tac instanceof ir.tac.Branch br && br.target().isUnreachable()) {
+                    br.disableEmit();
+                } else if (tac instanceof ir.tac.ConditionalBranch cb) {
+                    if (cb.trueTarget() != null && cb.trueTarget().isUnreachable()) {
+                        b.removeSuccessor(cb.trueTarget());
+                    }
+                    if (cb.falseTarget() != null && cb.falseTarget().isUnreachable()) {
+                        b.removeSuccessor(cb.falseTarget());
+                    }
+                }
+            }
+        }
+    }
+
     public String asDotGraph() {
-        return new CFGPrinter().print(this);
+        return new CFGPrinter().print(this, "CFG");
     }
 }

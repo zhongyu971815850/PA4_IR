@@ -1,0 +1,12 @@
+digraph main {
+  node [shape=record];
+  BB0 [label="BB0:\lx = assign 2\lcall printInt(x)\l"];
+  BB1 [label="BB1:\lreturn\l"];
+  BB2 [label="BB2:\lblt x, 5 -\> BB3 else BB1\l"];
+  BB3 [label="BB3:\lt4 = add x, 1\lx = assign t4\l"];
+  BB0 -> BB2;
+  BB2 -> BB3;
+  BB2 -> BB1;
+  BB3 -> BB2;
+}
+

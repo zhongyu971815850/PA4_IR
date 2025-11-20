@@ -1,0 +1,7 @@
+digraph main {
+  node [shape=record];
+  BB0 [label="BB0:\lt4 = add 102, y\lt7 = mul t4, 2\lt9 = add 51, t7\lt11 = add t9, z\lcall printInt(t4)\l"];
+  BB1 [label="BB1:\lreturn\l"];
+  BB0 -> BB1;
+}
+

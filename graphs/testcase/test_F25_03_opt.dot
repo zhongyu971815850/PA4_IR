@@ -1,0 +1,14 @@
+digraph main {
+  node [shape=record];
+  BB0 [label="BB0:\l"];
+  BB1 [label="BB1:\lreturn\l"];
+  BB0 -> BB1;
+}
+
+digraph nevercalled {
+  node [shape=record];
+  BB0 [label="BB0:\l"];
+  BB1 [label="BB1:\lreturn\l"];
+  BB0 -> BB1;
+}
+

@@ -112,8 +112,8 @@ public class CompilerTester {
         // For IR Visualizer
         String dotgraph_text = null;
         try {
-            dotgraph_text = c.genIR(ast).asDotGraph();
-            
+            dotgraph_text = c.genIR(ast).toDot();
+
             if (cmd.hasOption("cfg")) {
                 String[] cfg_output_options = cmd.getOptionValues("cfg");
                 
@@ -126,11 +126,13 @@ public class CompilerTester {
                             break;
                         case "file":
                             String filename = sourceFile.substring(0, sourceFile.lastIndexOf('.')) + "_"+ CFG_DOT_FILE_NAME;
-                            try (PrintStream out = new PrintStream(GRAPH_DIR_NAME+File.pathSeparator+filename)) {               
+                            File outFile = new File(GRAPH_DIR_NAME + File.separator + filename);
+                            outFile.getParentFile().mkdirs();
+                            try (PrintStream out = new PrintStream(outFile)) {
                                 out.print(dotgraph_text);
                             } catch (IOException e) {
                                 e.printStackTrace();
-                                System.err.println("Error accessing the cfg file: " + GRAPH_DIR_NAME + File.pathSeparator + filename);
+                                System.err.println("Error accessing the cfg file: " + outFile.getAbsolutePath());
                             }
                             break;
                         default:
@@ -152,6 +154,24 @@ public class CompilerTester {
         System.out.println("After optimization");
         System.out.println("-".repeat(100));
         System.out.println(dotgraph_text);
+
+        // Optional: write optimized CFG to file when -cfg file is provided
+        if (cmd.hasOption("cfg")) {
+            String[] cfg_output_options = cmd.getOptionValues("cfg");
+            for (String cfg_output : cfg_output_options) {
+                if ("file".equals(cfg_output)) {
+                    String filenameOpt = sourceFile.substring(0, sourceFile.lastIndexOf('.')) + "_opt.dot";
+                    File outFileOpt = new File(GRAPH_DIR_NAME + File.separator + filenameOpt);
+                    outFileOpt.getParentFile().mkdirs();
+                    try (PrintStream out = new PrintStream(outFileOpt)) {
+                        out.print(dotgraph_text);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        System.err.println("Error accessing the optimized cfg file: " + outFileOpt.getAbsolutePath());
+                    }
+                }
+            }
+        }
         // we expect after this, there is file recording all transformations your compiler did
         // e.g., if we run -s test000.txt -o cp -o cf -o dce -loop
         // the file will have the name "record_test000_cp_cf_dce_loop.txt"

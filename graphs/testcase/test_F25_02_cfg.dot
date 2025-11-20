@@ -1,0 +1,43 @@
+digraph main {
+  node [shape=record];
+  BB0 [label="BB0:\lcall unreachableIf()\lt2 = call early_return()\lcall printInt(t2)\l"];
+  BB1 [label="BB1:\lreturn\l"];
+  BB0 -> BB1;
+}
+
+digraph early_return {
+  node [shape=record];
+  BB0 [label="BB0:\lc = assign 1\lc = assign 2\lt8 = div c, d\lunused = assign t8\lt11 = mul c, d\lreturn t11\l"];
+  BB1 [label="BB1:\lreturn\l"];
+  BB0 -> BB1;
+}
+
+digraph unreachableIf {
+  node [shape=record];
+  BB0 [label="BB0:\lc = assign 1\ld = assign 2\lbe d, c -\> BB2 else BB1\l"];
+  BB1 [label="BB1:\lreturn\lbnz false -\> BB3 else BB4\lbnz true -\> BB5 else BB6\lbnz true -\> BB7 else BB1\lbnz false -\> BB8 else BB1\l"];
+  BB2 [label="BB2:\ld = assign c\l"];
+  BB3 [label="BB3:\lcall println()\l"];
+  BB4 [label="BB4:\lcall println()\l"];
+  BB5 [label="BB5:\lcall println()\l"];
+  BB6 [label="BB6:\lcall println()\l"];
+  BB7 [label="BB7:\lcall println()\l"];
+  BB8 [label="BB8:\lcall println()\l"];
+  BB0 -> BB2;
+  BB0 -> BB1;
+  BB1 -> BB3;
+  BB1 -> BB4;
+  BB1 -> BB5;
+  BB1 -> BB6;
+  BB1 -> BB7;
+  BB1 -> BB1;
+  BB1 -> BB8;
+  BB2 -> BB1;
+  BB3 -> BB1;
+  BB4 -> BB1;
+  BB5 -> BB1;
+  BB6 -> BB1;
+  BB7 -> BB1;
+  BB8 -> BB1;
+}
+

@@ -1,0 +1,14 @@
+digraph main {
+  node [shape=record];
+  BB0 [label="BB0:\lx = assign 1\lt2 = add x, 2\ly = assign t2\lt5 = add x, 2\lz = assign t5\lx = assign 2\lt9 = add x, 2\lw = assign t9\l"];
+  BB1 [label="BB1:\lreturn\l"];
+  BB0 -> BB1;
+}
+
+digraph nevercalled {
+  node [shape=record];
+  BB0 [label="BB0:\lx = assign 1\l"];
+  BB1 [label="BB1:\lreturn\l"];
+  BB0 -> BB1;
+}
+

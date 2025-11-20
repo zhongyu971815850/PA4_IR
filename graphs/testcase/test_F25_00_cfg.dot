@@ -1,0 +1,7 @@
+digraph main {
+  node [shape=record];
+  BB0 [label="BB0:\lx = assign 51\lt2 = mul 2, x\lt4 = add t2, y\ly = assign t4\lt7 = mul y, 2\lt9 = add x, t7\lt11 = add t9, z\lx = assign t11\lcall printInt(y)\l"];
+  BB1 [label="BB1:\lreturn\l"];
+  BB0 -> BB1;
+}
+

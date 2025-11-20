@@ -1,0 +1,26 @@
+digraph main {
+  node [shape=record];
+  BB0 [label="BB0:\lcall foo()\l"];
+  BB1 [label="BB1:\lreturn\l"];
+  BB0 -> BB1;
+}
+
+digraph foo {
+  node [shape=record];
+  BB0 [label="BB0:\la = assign 7\lt4 = add a, 2\lb = assign t4\lt7 = add a, b\lc = assign t7\lt10 = add c, b\ld = assign t10\lt13 = add c, b\lb = assign t13\lt16 = add a, b\la = assign t16\lt19 = add c, d\le = assign t19\lt22 = add c, d\lf = assign t22\lt25 = add a, b\lg = assign t25\lt28 = add e, f\lh = assign t28\lcall printInt(g)\lcall printInt(h)\l"];
+  BB1 [label="BB1:\lreturn\l"];
+  BB0 -> BB1;
+}
+
+digraph bar {
+  node [shape=record];
+  BB0 [label="BB0:\lt34 = add x, y\la = assign t34\lt37 = add x, 2\lb = assign t37\lt40 = add 2, x\lc = assign t40\lt43 = add x, 2\lt45 = mul 1, t43\ld = assign t45\lbg x, y -\> BB2 else BB3\l"];
+  BB1 [label="BB1:\lreturn\lt66 = add x, y\la = assign t66\lt69 = add a, b\lg = assign t69\lt72 = add c, d\lh = assign t72\lcall printInt(g)\lcall printInt(h)\l"];
+  BB2 [label="BB2:\lt49 = add x, y\ld = assign t49\lt52 = add x, 2\lt54 = sub 0, t52\lb = assign t54\lt57 = add x, 1\lx = assign t57\l"];
+  BB3 [label="BB3:\lt60 = add x, 2\ld = assign t60\lt63 = add 2, x\ly = assign t63\l"];
+  BB0 -> BB2;
+  BB0 -> BB3;
+  BB2 -> BB1;
+  BB3 -> BB1;
+}
+

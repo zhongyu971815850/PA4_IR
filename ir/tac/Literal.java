@@ -20,6 +20,18 @@ public class Literal implements Value {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Literal other)) return false;
+        return Objects.equals(this.toString(), other.toString());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.toString());
+    }
+
+    @Override
     public void accept(TACVisitor visitor) {
         visitor.visit(this);
     }

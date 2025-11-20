@@ -1,0 +1,26 @@
+digraph main {
+  node [shape=record];
+  BB0 [label="BB0:\la = assign 5\lb = assign 0\lt3 = div a, a\lb = assign t3\lt6 = sub a, a\lb = assign t6\lt9 = div a, 1\lb = assign t9\lt12 = add a, 0\lb = assign t12\lt15 = add 0, a\lb = assign t15\lt18 = sub a, 0\lb = assign t18\lg = assign 5.0\lt22 = add g, 0.0\lh = assign t22\lt25 = sub g, 0.0\lh = assign t25\lt28 = mul g, 1.0\lh = assign t28\lt31 = div g, 1.0\lh = assign t31\lt34 = mul g, 0.0\lh = assign t34\lt37 = div 0.0, g\lh = assign t37\lblt a, a -\> BB2 else BB1\l"];
+  BB1 [label="BB1:\lreturn\lbg a, a -\> BB3 else BB1\lbge a, a -\> BB4 else BB1\lble a, a -\> BB5 else BB1\lbe a, a -\> BB6 else BB1\lbne a, a -\> BB7 else BB1\le = assign true\lf = assign 0\le = assign false\lf = assign 0\l"];
+  BB2 [label="BB2:\lc = assign 5\l"];
+  BB3 [label="BB3:\lc = assign 6\l"];
+  BB4 [label="BB4:\lc = assign 7\l"];
+  BB5 [label="BB5:\lc = assign 8\l"];
+  BB6 [label="BB6:\lc = assign 9\l"];
+  BB7 [label="BB7:\lc = assign 10\l"];
+  BB0 -> BB2;
+  BB0 -> BB1;
+  BB1 -> BB3;
+  BB1 -> BB1;
+  BB1 -> BB4;
+  BB1 -> BB5;
+  BB1 -> BB6;
+  BB1 -> BB7;
+  BB2 -> BB1;
+  BB3 -> BB1;
+  BB4 -> BB1;
+  BB5 -> BB1;
+  BB6 -> BB1;
+  BB7 -> BB1;
+}
+

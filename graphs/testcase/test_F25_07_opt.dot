@@ -1,0 +1,19 @@
+digraph main {
+  node [shape=record];
+  BB0 [label="BB0:\lt4 = call foo(5)\lcall printBool(t4)\lt8 = call foo(5)\lcall printBool(t8)\l"];
+  BB1 [label="BB1:\lreturn\l"];
+  BB0 -> BB1;
+}
+
+digraph foo {
+  node [shape=record];
+  BB0 [label="BB0:\lt13 = add 5, y\lblt x, t13 -\> BB2 else BB3\l"];
+  BB1 [label="BB1:\lreturn\l"];
+  BB2 [label="BB2:\lreturn true\l"];
+  BB3 [label="BB3:\lreturn false\l"];
+  BB0 -> BB2;
+  BB0 -> BB3;
+  BB2 -> BB1;
+  BB3 -> BB1;
+}
+

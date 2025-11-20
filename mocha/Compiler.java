@@ -20,6 +20,10 @@ import mocha.NonTerminal;
 import types.ErrorType;
 import types.VoidType;
 
+import ir.IRProgram;
+import ir.build.IRGenerator;
+import ir.optimize.Optimizer;
+
 public class Compiler {
 
     // Error Reporting ============================================================
@@ -893,5 +897,25 @@ public class Compiler {
         expect(Token.Kind.PERIOD);
         
         return new ast.Computation(lineNumber(), charPosition(), mainSymbol, varDecls, funcDecls, statSeq);
+    }
+
+    // --- IR/Optimization hooks -------------------------------------------------
+
+    /**
+     * Placeholder IR generation to keep pipeline compiling.
+     * TODO: wire AST -> IRProgram/IRFunction/CFG construction.
+     */
+    public IRProgram genIR(AST ast) {
+        return new IRGenerator().generate(ast);
+    }
+
+    /**
+     * Run optimization pipeline and return DOT for entry function(s).
+     */
+    public String optimization(List<String> opts, boolean loop, boolean max) {
+        IRProgram program = genIR(parsedAST);
+        Optimizer optimizer = new Optimizer();
+        optimizer.run(program, opts);
+        return program.toDot();
     }
 }
